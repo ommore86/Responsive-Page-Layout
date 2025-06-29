@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Om More's Website</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #0f172a;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .header-content {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    #nav-toggle {
+      display: none;
+    }
+
+    #sidebar-toggle {
+      display: none;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 1.75rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+      z-index: 2000;
+    }
+
+    .sidebar-toggle-container {
+      margin-top: 0.5rem;
+    }
+
+    .sidebar-toggle-desktop {
+      font-size: 1rem;
+      cursor: pointer;
+      background: #1e293b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.25rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-toggle-desktop::before {
+      content: "☰";
+    }
+
+    .collapsed-sidebar .sidebar-toggle-desktop::before {
+      content: "›";
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      transition: background 0.2s;
+    }
+
+    nav a:hover {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+
+    .wrapper {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1.5rem;
+    }
+
+    main {
+      background: white;
+      padding: 1.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: margin-left 0.3s ease;
+    }
+
+    aside {
+      background: white;
+      padding: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    aside ul {
+      list-style: square inside;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    aside a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    aside a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: #0f172a;
+      color: #e2e8f0;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: row;
+        padding: 1rem;
+      }
+
+      .header-content {
+        width: auto;
+      }
+
+      .sidebar-toggle-container {
+        display: none;
+      }
+
+      nav ul {
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #0f172a;
+        padding: 1rem;
+        display: none;
+        z-index: 1000;
+      }
+
+      #nav-toggle:checked~nav ul {
+        display: flex;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      aside {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 250px;
+        background: white;
+        transform: translateX(-100%);
+        z-index: 1001;
+        box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+        padding-top: 4rem;
+      }
+
+      #sidebar-toggle:checked~.wrapper aside {
+        transform: translateX(0);
+      }
+
+      .sidebar-toggle-mobile {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        font-size: 1.75rem;
+        cursor: pointer;
+        background: #0f172a;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem;
+        z-index: 1002;
+        display: block;
+      }
+
+      #sidebar-toggle:checked~.wrapper main {
+        margin-left: 250px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .sidebar-toggle-mobile {
+        display: none;
+      }
+
+      .grid-layout {
+        grid-template-columns: 250px 1fr;
+      }
+
+      .collapsed-sidebar .grid-layout {
+        grid-template-columns: 0 1fr;
+      }
+
+      .collapsed-sidebar aside {
+        transform: translateX(-100%);
+        opacity: 0;
+        position: absolute;
+        width: 250px;
+      }
+
+      .collapsed-sidebar main {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">Om More</div>
+      <input type="checkbox" id="nav-toggle" />
+      <label for="nav-toggle" class="menu-icon" aria-label="Menu">&#9776;</label>
+    </div>
+
+    <div class="sidebar-toggle-container">
+      <button class="sidebar-toggle-desktop" id="desktop-sidebar-toggle" aria-label="Toggle Sidebar">Quick
+        Links</button>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Checkbox and label for sidebar (mobile) -->
+  <input type="checkbox" id="sidebar-toggle" />
+  <label for="sidebar-toggle" class="sidebar-toggle-mobile" aria-label="Sidebar">☰</label>
+
+  <!-- Main Content & Sidebar -->
+  <div class="wrapper">
+    <div class="grid-layout">
+      <aside>
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/om-more-b802b2281/">LinkedIn</a></li>
+          <li><a href="https://github.com/ommore86">Github</a></li>
+          <li><a href="https://ommore86.github.io/Portfolio-Website/">Portfolio</a></li>
+          <li><a href="mailto:omgmore2005@gmail.com">omgmore2005@gmail.com</a></li>
+        </ul>
+      </aside>
+
+      <main>
+        <section id="home">
+          <h1>Om More's Website</h1>
+          <p>Welcome to my personal website! Here you can find information about my education, projects, and how
+            tocontact me.</p>
+
+          <h1>Welcome !!!</h1>
+          <p>Hi. I'm Om More, a passionate developer with a keen interest in Programming and Artificial Intelligence &
+            Data Science (AI&DS).</p>
+          <p>I love to explore the world of technology and create innovative solutions.</p>
+          <p>Currently, I'm focused on enhancing my skills in Data Structures and Algorithms (DSA) and exploring Machine
+            Learning and Deep Learning.</p>
+        </section>
+
+        <section id="education" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <h2>Education</h2>
+          <ul>
+            <li>BE (AI&DS) - VESIT '27</li>
+            <li>Diploma in Computer Engineering - Government Polytechnic Thane '24</li>
+            <li>SSC - SVVHS '21</li>
+          </ul>
+        </section>
+
+        <section id="projects" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <h2>Projects</h2>
+          <p>Check out some of my recent work:</p>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: #f1f5f9; padding: 1rem; border-radius: 4px;">
+              <h3 style="margin-top: 0;">Portfolio Website</h3>
+              <a href="https://portfolio-website-om-more.vercel.app/">
+                <p>Live Demo</p>
+              </a>
+            </div>
+            <div style="background: #f1f5f9; padding: 1rem; border-radius: 4px;">
+              <h3 style="margin-top: 0;">Twitter Clone</h3>
+              <a href="https://twitter-clone-om-more.vercel.app/">
+                <p>Live Demo</p>
+              </a>
+            </div>
+            <div style="background: #f1f5f9; padding: 1rem; border-radius: 4px;">
+              <h3 style="margin-top: 0;">Mobile App</h3>
+              <a href="https://github.com/ommore86/Tiny-Tots">
+                <p>Demo</p>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <h2>Contact Us</h2>
+          <p>Get in touch with me:</p>
+          <form style="display: grid; gap: 1rem; max-width: 500px;">
+            <div>
+              <label style="display: block; margin-bottom: 0.25rem;">Linkedin: </label>
+              <a href="https://www.linkedin.com/in/om-more-b802b2281/"
+                style="padding: 0.5rem; background: #0f172a; color: white; text-decoration: none; border-radius: 4px;">
+                My LinkedIn</a>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.25rem;">Github: </label>
+              <a href="https://github.com/ommore86"
+                style="padding: 0.5rem; background: #0f172a; color: white; text-decoration: none; border-radius: 4px;">
+                My Github</a>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.25rem;">Mail me:</label>
+              <a href="mailto:omgmore2005@gmail.com"
+                style="padding: 0.5rem; background: #0f172a; color: white; text-decoration: none; border-radius: 4px;">
+                Gmail</a>
+            </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Om More. All rights reserved.
+  </footer>
+
+  <script>
+    // For desktop sidebar toggle
+    document.getElementById('desktop-sidebar-toggle').addEventListener('click', function () {
+      document.body.classList.toggle('collapsed-sidebar');
+    });
+  </script>
+</body>
+
+</html>
